@@ -1,0 +1,43 @@
+int red = 16,yellow = 5,green = 4,redOrGreen,yellowTime;
+unsigned long currTime,prevTime;
+
+void setup() {
+  pinMode(red, OUTPUT);
+  pinMode(yellow, OUTPUT);
+  pinMode(green, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  currTime=millis();
+  Serial.println(currTime);
+  delay(1000);
+  if(currTime<999){
+    digitalWrite(red,HIGH);
+    digitalWrite(yellow,LOW);
+    digitalWrite(green,LOW);
+    prevTime=currTime; redOrGreen=1; yellowTime=1;
+    Serial.println("Merah");
+  }
+  else{
+    if(currTime-prevTime>=10000&&yellowTime==1){
+      digitalWrite(yellow,HIGH);
+      digitalWrite(red,LOW);
+      digitalWrite(green,LOW);
+      prevTime=currTime; yellowTime=0;
+      Serial.println("Kuning");
+    }
+    if(currTime-prevTime>=1000&&digitalRead(yellow)==1&&redOrGreen==0){
+      digitalWrite(red,HIGH);
+      digitalWrite(yellow,LOW);
+      prevTime=currTime; redOrGreen=1;yellowTime=1;
+      Serial.println("Merah");
+    }
+    if(currTime-prevTime>=1000&&digitalRead(yellow)==1&&redOrGreen==1){
+      digitalWrite(green,HIGH);
+      digitalWrite(yellow,LOW);
+      prevTime=currTime; redOrGreen=0;yellowTime=1;
+      Serial.println("Hijau");
+    }
+  }
+}
